@@ -69,7 +69,7 @@ const MODULES = [
   {
     id: 'm6',
     num: '06',
-    title: 'النمو والتوليد',
+    title: 'النمو وتحديد المؤشرات',
     subtitle: 'المؤشرات والتسعير واستراتيجيات النمو',
     videos: [
       { id: 'm6v1', label: 'كيف تحدد المؤشرات (KPIs) وترتب أولوياتك', url: 'https://youtu.be/6DTK9yDP6p0' },
