@@ -288,6 +288,63 @@ function ModuleCard({ mod, checked, onToggle, idx }) {
   );
 }
 
+// ─── ShareSection ─────────────────────────────────────────────────────────────
+
+const INVITE_TEXT = 'أهلاً، وجدت هذا المسار الرهيب لتأسيس الشركات (مسار المؤسس)، أعتقد أنه يفيدك: https://founder-path.com';
+
+function ShareSection() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(INVITE_TEXT);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // fallback for older browsers
+      const el = document.createElement('textarea');
+      el.value = INVITE_TEXT;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <div className="text-center px-4 py-10 border-t border-white/[0.06]">
+      <p className="text-[13px] text-[#7a7672] leading-[1.7] max-w-[380px] mx-auto mb-4">
+        أعجبك المحتوى؟ شاركه مع صديق واحد فقط ليتعلم معك.
+      </p>
+      <div className="relative inline-flex flex-col items-center gap-2">
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-2 text-[12px] text-[#3d3b38] border border-white/[0.06] px-4 py-2 rounded-full transition-all duration-200 bg-transparent cursor-pointer font-sans hover:border-white/[0.12] hover:text-[#7a7672] hover:bg-[#141414]"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          انسخ رسالة المشاركة
+        </button>
+        <span
+          className="text-[11px] text-[var(--accent)] font-medium pointer-events-none"
+          style={{
+            opacity: copied ? 1 : 0,
+            transform: copied ? 'translateY(0)' : 'translateY(4px)',
+            transition: 'opacity 0.2s ease, transform 0.2s ease',
+          }}
+          aria-live="polite"
+        >
+          تم النسخ بنجاح! ✓
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -403,6 +460,9 @@ export default function App() {
           </button>
         )}
       </div>
+
+      {/* Share section */}
+      <ShareSection />
 
       {/* Footer */}
       <footer className="text-center px-6 pt-12 pb-8 border-t border-white/[0.06] mt-16">
