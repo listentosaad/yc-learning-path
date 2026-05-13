@@ -199,7 +199,7 @@ function ModuleCard({ mod, checked, onToggle, idx }) {
 
   return (
     <div
-      className={`animate-card-in rounded-[14px] overflow-hidden transition-all duration-200 hover:shadow-[0_4px_32px_rgba(0,0,0,0.4)] ${
+      className={`group animate-card-in rounded-[14px] overflow-hidden transition-all duration-200 hover:shadow-[0_4px_32px_rgba(0,0,0,0.4)] ${
         allDone
           ? 'bg-[#141414] border border-[oklch(0.68_0.18_45_/_0.25)] shadow-[0_0_0_1px_oklch(0.68_0.18_45_/_0.12)]'
           : 'bg-[#141414] border border-white/[0.06] hover:border-white/[0.12]'
@@ -229,8 +229,8 @@ function ModuleCard({ mod, checked, onToggle, idx }) {
 
         <div className="flex items-center gap-3 flex-shrink-0">
           {!allDone && !open && (
-            <span className="text-[10px] text-[#3d3b38] bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 rounded-full tabular-nums">
-              {items.length} عنصر
+            <span className="text-[10px] text-[#3d3b38] border border-white/20 px-2 py-0.5 rounded-full tabular-nums transition-all duration-200 group-hover:border-[var(--accent)] group-hover:text-[#7a7672]">
+              {items.length} درس
             </span>
           )}
           <RingProgress done={doneCount} total={items.length} />
@@ -283,6 +283,50 @@ function ModuleCard({ mod, checked, onToggle, idx }) {
             </>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── CelebrationBox ───────────────────────────────────────────────────────────
+
+const STAR_POSITIONS = [
+  { left: '4%',  top: '18%', delay: 0,    duration: 2.6 },
+  { left: '14%', top: '72%', delay: 0.5,  duration: 3.1 },
+  { left: '28%', top: '88%', delay: 0.9,  duration: 2.4 },
+  { left: '50%', top: '2%',  delay: 1.3,  duration: 3.3 },
+  { left: '72%', top: '82%', delay: 0.4,  duration: 2.8 },
+  { left: '86%', top: '68%', delay: 0.7,  duration: 2.5 },
+  { left: '93%', top: '14%', delay: 1.1,  duration: 3.0 },
+];
+
+function CelebrationBox() {
+  return (
+    <div className="relative max-w-[520px] mx-auto px-4 py-12 text-center">
+      {STAR_POSITIONS.map((s, i) => (
+        <span
+          key={i}
+          className="absolute text-xl pointer-events-none select-none"
+          style={{
+            left: s.left,
+            top: s.top,
+            animation: `floatStar ${s.duration}s ease-in-out ${s.delay}s infinite`,
+          }}
+          aria-hidden="true"
+        >
+          ⭐
+        </span>
+      ))}
+      <div className="relative bg-[var(--accent-glow)] border border-[var(--accent-dim)] rounded-[20px] px-8 py-8 shadow-[0_0_80px_oklch(0.68_0.18_45_/_0.12)]">
+        <p
+          className="font-serif font-bold text-[var(--accent)] mb-3"
+          style={{ fontSize: 'clamp(28px, 6vw, 40px)' }}
+        >
+          شطوووووووورر!
+        </p>
+        <p className="text-[13px] text-[#7a7672] leading-[1.8]">
+          لقد أتممت مسار المؤسس بالكامل.<br />أنت الآن جاهز للانطلاق!
+        </p>
       </div>
     </div>
   );
@@ -463,6 +507,9 @@ export default function App() {
 
       {/* Share section */}
       <ShareSection />
+
+      {/* Celebration */}
+      {allComplete && <CelebrationBox />}
 
       {/* Footer */}
       <footer className="text-center px-6 pt-12 pb-8 border-t border-white/[0.06] mt-16">
