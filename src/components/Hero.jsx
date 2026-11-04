@@ -55,7 +55,7 @@ export default function Hero() {
   return (
     <section
       id="essays"
-      className="relative overflow-hidden grid grid-cols-1 min-[860px]:grid-cols-2 min-h-[calc(100svh-240px)] min-[860px]:min-h-[calc(100vh-80px)] items-stretch border-b border-white/[0.06]"
+      className="relative overflow-hidden grid grid-cols-1 min-[860px]:grid-cols-2 flex-1 min-[860px]:flex-none min-[860px]:min-h-[calc(100vh-80px)] items-stretch border-b border-white/[0.06]"
     >
       <div className="relative z-[1] flex flex-col justify-end min-[860px]:justify-center gap-[clamp(18px,2.4vw,28px)] min-w-0 pt-[clamp(24px,4vw,48px)] pb-8 min-[860px]:pb-[clamp(24px,4vw,48px)] px-[clamp(16px,5vw,72px)]">
         <h1
@@ -77,8 +77,8 @@ export default function Hero() {
       </div>
 
       {/* Portrait: beside the text on desktop, a faded backdrop on mobile.
-          On mobile the hero is shorter than the screen (100svh - 240px) and the
-          text sits at its bottom, so the plan heading peeks above the fold. */}
+          On mobile the portrait spans the full width and the text sits at the
+          bottom of the hero (see the first-screen wrapper in App.jsx). */}
       <div
         className="absolute inset-0 z-0 min-w-0 min-[860px]:relative min-[860px]:inset-auto min-[860px]:min-h-[min(80vh,640px)]"
         style={fade(1.4, 0.3)}
@@ -88,7 +88,7 @@ export default function Hero() {
           alt="باول غراهام"
           width="495"
           height="600"
-          className="absolute top-[-12%] inset-x-0 mx-auto w-[min(78%,420px)] h-auto aspect-[1163/1414] opacity-[0.55] object-cover object-top min-[860px]:top-0 min-[860px]:w-full min-[860px]:h-full min-[860px]:aspect-auto min-[860px]:opacity-100"
+          className="absolute top-0 inset-x-0 mx-auto w-full h-auto aspect-[1163/1414] opacity-[0.55] object-cover object-top min-[860px]:top-0 min-[860px]:w-full min-[860px]:h-full min-[860px]:aspect-auto min-[860px]:opacity-100"
         />
         <div
           className="absolute inset-0 pointer-events-none min-[860px]:hidden"
