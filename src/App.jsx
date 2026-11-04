@@ -39,8 +39,13 @@ export default function App() {
         />
       </div>
 
-      <Nav />
-      <Hero />
+      {/* First screen on mobile: Nav + Hero fill the screen minus 56px. The plan
+          section's 40px top padding takes most of that, so only the top ~16px of
+          its heading shows, as a hint to scroll. Desktop sizes come from Hero. */}
+      <div className="flex flex-col min-h-[calc(100svh-56px)] min-[860px]:block min-[860px]:min-h-0">
+        <Nav />
+        <Hero />
+      </div>
       <PlanSection checked={checked} totalDone={totalDone} onToggle={onToggle} onReset={onReset} />
       {allComplete && <CelebrationBox />}
       <ShareSection />
