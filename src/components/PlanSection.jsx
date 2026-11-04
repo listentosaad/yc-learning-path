@@ -217,7 +217,7 @@ export default function PlanSection({ checked, totalDone, onToggle, onReset }) {
   return (
     <section
       id="plan"
-      className="max-w-[1160px] mx-auto pt-[clamp(64px,9vw,128px)] px-[clamp(16px,4vw,40px)] pb-[clamp(64px,8vw,112px)] grid grid-cols-[minmax(0,1fr)] min-[1000px]:grid-cols-[minmax(0,1fr)_minmax(0,1.8fr)] gap-[clamp(40px,5vw,88px)] items-start"
+      className="max-w-[1160px] mx-auto pt-10 min-[860px]:pt-[clamp(64px,9vw,128px)] px-[clamp(16px,4vw,40px)] pb-[clamp(64px,8vw,112px)] grid grid-cols-[minmax(0,1fr)] min-[1000px]:grid-cols-[minmax(0,1fr)_minmax(0,1.8fr)] gap-[clamp(40px,5vw,88px)] items-start"
     >
       <aside className="static min-[1000px]:sticky top-8 flex flex-col gap-8 min-w-0">
         <div className="flex flex-col gap-4">

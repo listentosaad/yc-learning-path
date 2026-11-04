@@ -55,9 +55,9 @@ export default function Hero() {
   return (
     <section
       id="essays"
-      className="relative overflow-hidden grid grid-cols-1 min-[860px]:grid-cols-2 min-h-[calc(100vh-80px)] items-stretch border-b border-white/[0.06]"
+      className="relative overflow-hidden grid grid-cols-1 min-[860px]:grid-cols-2 min-h-[calc(100svh-240px)] min-[860px]:min-h-[calc(100vh-80px)] items-stretch border-b border-white/[0.06]"
     >
-      <div className="relative z-[1] flex flex-col justify-center gap-[clamp(18px,2.4vw,28px)] min-w-0 py-[clamp(24px,4vw,48px)] px-[clamp(16px,5vw,72px)]">
+      <div className="relative z-[1] flex flex-col justify-end min-[860px]:justify-center gap-[clamp(18px,2.4vw,28px)] min-w-0 pt-[clamp(24px,4vw,48px)] pb-8 min-[860px]:pb-[clamp(24px,4vw,48px)] px-[clamp(16px,5vw,72px)]">
         <h1
           className="m-0 font-serif font-bold text-[clamp(44px,6.4vw,80px)] leading-[1.15] tracking-normal flex flex-col"
           style={{ fontFeatureSettings: '"calt" 1, "liga" 1, "cswh" 1' }}
@@ -76,7 +76,9 @@ export default function Hero() {
         <SubscribeForm />
       </div>
 
-      {/* Portrait: beside the text on desktop, a faded backdrop on mobile */}
+      {/* Portrait: beside the text on desktop, a faded backdrop on mobile.
+          On mobile the hero is shorter than the screen (100svh - 240px) and the
+          text sits at its bottom, so the plan heading peeks above the fold. */}
       <div
         className="absolute inset-0 z-0 min-w-0 min-[860px]:relative min-[860px]:inset-auto min-[860px]:min-h-[min(80vh,640px)]"
         style={fade(1.4, 0.3)}
