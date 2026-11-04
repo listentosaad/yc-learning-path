@@ -40,12 +40,22 @@ npm run preview    # preview the production build locally
 ```
 src/
   main.jsx          # React entry point — mounts <App />
-  App.jsx           # ENTIRE application (data + all components)
-  index.css         # Font-face declarations, CSS vars, Tailwind imports, keyframes
+  App.jsx           # Root component — owns progress state, renders sections
+  index.css         # Font-face, CSS vars, Tailwind imports, keyframes
+  data/
+    modules.js      # MODULES content + localStorage helpers + ALL_ITEMS / TOTAL
+  components/
+    Nav.jsx         # Logo + pill links (#plan, #essays)
+    Hero.jsx        # "باول غراهام بالعربية" hero, newsletter form, portrait
+    PlanSection.jsx # Study plan: sticky aside (progress card, module index) + module list
+    CelebrationBox.jsx # Shown only when every lesson is done
+    ShareSection.jsx   # Copy-invite card
+    Footer.jsx
 
 public/
   fonts/            # ThmanyahSans & ThmanyahSerif OTF files (5 files)
   preview.png       # OG image for social sharing
+  paul-graham.webp  # Hero portrait (from the design file)
 
 index.html          # HTML shell — sets lang="ar" dir="rtl", Umami script, OG tags
 tailwind.config.js  # Custom fonts, borderRadius.card, animation.card-in
@@ -59,20 +69,24 @@ vite.config.js      # Minimal — just @vitejs/plugin-react
 
 ## Architecture
 
-Everything lives in `src/App.jsx`. The file is organized top-to-bottom:
+The page is a single scroll, top to bottom:
 
-1. **`MODULES` array** — all content data (ids, titles, videos, readings)
-2. **`STORAGE_KEY`** — localStorage key (`yc_study_plan_v1`)
-3. **`loadChecked` / `saveChecked`** — localStorage helpers
-4. **`ALL_ITEMS` / `TOTAL`** — derived constants computed once at module load
-5. **Components** (in render order):
-   - `RingProgress` — SVG circular progress ring with checkmark at 100%
-   - `ItemRow` — a single video or reading row (checkbox + link)
-   - `SectionLabel` — "فيديوهات" / "قراءات" section headers
-   - `ModuleCard` — collapsible card (header with ring + expand/collapse body)
-   - `CelebrationBox` — animated stars + completion message (shown when all done)
-   - `ShareSection` — copy-to-clipboard invite button
-   - `App` — root component, owns all state
+1. **Progress bar** (fixed, top) — in `App.jsx`
+2. **`Nav`** — logo + pill links to `#plan` and `#essays`
+3. **`Hero`** (`#essays`) — Paul Graham in Arabic headline, newsletter form, portrait.
+   Two columns ≥860px; below that the portrait becomes a faded backdrop.
+4. **`PlanSection`** (`#plan`) — aside (title, `ProgressCard`, `ModuleIndex`) + an `<ol>` of
+   `ModuleItem`s, each listing `LessonCard`s (link + "أنهيته"/"مكتمل" toggle button).
+   Two columns with a sticky aside ≥1000px; the module index is hidden below that.
+5. **`CelebrationBox`** — only when all lessons are done
+6. **`ShareSection`**, **`Footer`**
+
+Breakpoints use Tailwind arbitrary variants (`min-[860px]:`, `min-[1000px]:`) to match the design.
+
+### Newsletter form
+
+The hero's email form (design's own) opens `https://paulgarabic.substack.com/subscribe?email=…`
+in a new tab; Substack pre-fills the address and the reader confirms there. No iframe.
 
 ---
 
@@ -103,7 +117,7 @@ No prop drilling issues — `checked` and `onToggle` flow down two levels max.
 
 ## Content Data Model
 
-Modules are defined in the `MODULES` constant at the top of `App.jsx`:
+Modules are defined in the `MODULES` constant in `src/data/modules.js`:
 
 ```js
 {
@@ -141,7 +155,7 @@ Modules are defined in the `MODULES` constant at the top of `App.jsx`:
 
 ### Tailwind Custom Tokens (in `tailwind.config.js`)
 - `rounded-card` → `14px` (module card corners)
-- `animate-card-in` → fade + slide-up 0.4s (applied to `ModuleCard` body on open)
+- `animate-card-in` → fade + slide-up 0.5s (applied to each module `<li>` and the celebration card)
 
 ### Conventions
 - Dark background: `#0d0d0d` — never use Tailwind's `bg-black` (too harsh)
@@ -158,11 +172,13 @@ Modules are defined in the `MODULES` constant at the top of `App.jsx`:
 
 ## Animation
 
-Two animations defined in CSS:
+Three animations defined in CSS:
 
-1. **`cardIn`** — module body open animation. Applied via `animate-card-in` class. Starts hidden (`opacity: 0; transform: translateY(20px)`) and transitions in. The `opacity: 0` initial state is set in the utility layer to prevent flash before animation.
+1. **`heroFade`** — blur + fade + slide-up for hero elements, staggered with inline `animation` delays.
 
-2. **`floatStar`** — celebration floating stars. Stars are absolutely positioned spans that animate up and fade out.
+2. **`cardIn`** — module entrance animation. Applied via `animate-card-in` class. Starts hidden (`opacity: 0; transform: translateY(20px)`) and transitions in. The `opacity: 0` initial state is set in the utility layer to prevent flash before animation.
+
+3. **`floatStar`** — celebration floating stars. Stars are absolutely positioned spans that animate up and fade out.
 
 Stagger effect on module cards uses inline `animationDelay` style, e.g., `style={{ animationDelay: \`${index * 80}ms\` }}`.
 
@@ -199,7 +215,6 @@ The site is live at https://founder-path.com.
 
 ## Known Tech Debt
 
-- **All code in one file:** `App.jsx` is ~600+ lines. When adding significant features, consider splitting into `src/components/` and `src/data/modules.js`.
 - **No tests:** No Vitest or testing-library setup. If adding tests, prefer Vitest (already have Vite) + React Testing Library.
 - **No TypeScript:** JSDoc type comments are sufficient for now; add TS via `@ts-check` pragmas if needed without a full migration.
 - **Root-level font files:** Five `.otf` files exist at the project root and are unused. Delete them.
