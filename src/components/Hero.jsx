@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export const SUBSTACK_URL = 'https://paulgarabic.substack.com';
 
 const fade = (duration, delay) => ({
@@ -5,21 +7,47 @@ const fade = (duration, delay) => ({
   animation: `heroFade ${duration}s cubic-bezier(0.22,1,0.36,1) ${delay}s forwards`,
 });
 
-// Substack's embed is a full page (logo, title, description, form, terms).
-// The design only has room for the email row, so the iframe is framed by a
-// window that starts just above the form. See `.substack-*` in index.css.
-function SubstackEmbed() {
+// Subscribe form from the design: opens Substack's subscribe page in a new
+// tab with the email already filled in, where the reader confirms.
+function SubscribeForm() {
+  const [email, setEmail] = useState('');
+  const onSubmit = (e) => {
+    e.preventDefault();
+    window.open(`${SUBSTACK_URL}/subscribe?email=${encodeURIComponent(email)}`, '_blank', 'noopener');
+  };
   return (
-    <div className="substack-frame">
-      <iframe
-        src={`${SUBSTACK_URL}/embed`}
-        title="اشترك في نشرة باول غراهام بالعربية"
-        className="substack-iframe"
-        frameBorder="0"
-        scrolling="no"
-        loading="lazy"
-      />
-    </div>
+    <form onSubmit={onSubmit} className="flex flex-col gap-2.5 max-w-[520px]" style={fade(1, 1.1)}>
+      <div className="flex gap-2 p-1.5 bg-[#141414] border border-white/[0.08] rounded-[14px] flex-wrap">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="بريدك الإلكتروني"
+          aria-label="بريدك الإلكتروني"
+          dir="ltr"
+          className="flex-[1_1_200px] min-w-0 bg-transparent border-0 outline-none text-[#f0ede8] font-sans text-[16px] px-3.5 py-3 text-right placeholder:text-[#3d3b38]"
+        />
+        <button
+          type="submit"
+          className="flex-[0_0_auto] bg-[var(--accent)] text-[#0d0d0d] border-0 rounded-[10px] px-6 py-3 font-sans font-bold text-[15px] cursor-pointer transition-[filter] duration-200 hover:brightness-[1.08]"
+        >
+          اشترك في النشرة
+        </button>
+      </div>
+      <div className="flex items-center gap-1.5 text-[12px] text-[#7a7672]">
+        <span className="w-[5px] h-[5px] rounded-full bg-[var(--accent)] shrink-0" />
+        <span>مقالة مترجمة جديدة في بريدك، عبر</span>
+        <a
+          href={SUBSTACK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#f0ede8] underline underline-offset-[3px] decoration-[rgba(240,237,232,0.3)]"
+        >
+          Substack
+        </a>
+      </div>
+    </form>
   );
 }
 
@@ -45,21 +73,7 @@ export default function Hero() {
           ترجمات رصينة لجَمهرَة مقالات باول غراهام، أبرز أصوات ريادة الأعمال. المصدر المعرفي الأبرز لتأسيس شركتك الناشئة.
         </h2>
 
-        <div className="flex flex-col gap-2.5 max-w-[520px]" style={fade(1, 1.1)}>
-          <SubstackEmbed />
-          <div className="flex items-center gap-1.5 text-[12px] text-[#7a7672]">
-            <span className="w-[5px] h-[5px] rounded-full bg-[var(--accent)] shrink-0" />
-            <span>مقالة مترجمة جديدة في بريدك، عبر</span>
-            <a
-              href={SUBSTACK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#f0ede8] underline underline-offset-[3px] decoration-[rgba(240,237,232,0.3)]"
-            >
-              Substack
-            </a>
-          </div>
-        </div>
+        <SubscribeForm />
       </div>
 
       {/* Portrait: beside the text on desktop, a faded backdrop on mobile */}

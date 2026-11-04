@@ -41,12 +41,12 @@ npm run preview    # preview the production build locally
 src/
   main.jsx          # React entry point — mounts <App />
   App.jsx           # Root component — owns progress state, renders sections
-  index.css         # Font-face, CSS vars, Tailwind imports, keyframes, Substack embed crop
+  index.css         # Font-face, CSS vars, Tailwind imports, keyframes
   data/
     modules.js      # MODULES content + localStorage helpers + ALL_ITEMS / TOTAL
   components/
     Nav.jsx         # Logo + pill links (#plan, #essays)
-    Hero.jsx        # "باول غراهام بالعربية" hero, Substack embed, portrait
+    Hero.jsx        # "باول غراهام بالعربية" hero, newsletter form, portrait
     PlanSection.jsx # Study plan: sticky aside (progress card, module index) + module list
     CelebrationBox.jsx # Shown only when every lesson is done
     ShareSection.jsx   # Copy-invite card
@@ -73,7 +73,7 @@ The page is a single scroll, top to bottom:
 
 1. **Progress bar** (fixed, top) — in `App.jsx`
 2. **`Nav`** — logo + pill links to `#plan` and `#essays`
-3. **`Hero`** (`#essays`) — Paul Graham in Arabic headline, Substack subscribe embed, portrait.
+3. **`Hero`** (`#essays`) — Paul Graham in Arabic headline, newsletter form, portrait.
    Two columns ≥860px; below that the portrait becomes a faded backdrop.
 4. **`PlanSection`** (`#plan`) — aside (title, `ProgressCard`, `ModuleIndex`) + an `<ol>` of
    `ModuleItem`s, each listing `LessonCard`s (link + "أنهيته"/"مكتمل" toggle button).
@@ -83,13 +83,10 @@ The page is a single scroll, top to bottom:
 
 Breakpoints use Tailwind arbitrary variants (`min-[860px]:`, `min-[1000px]:`) to match the design.
 
-### Substack embed
+### Newsletter form
 
-The newsletter box is `https://paulgarabic.substack.com/embed` in an iframe. Substack's embed is a
-full page (logo, title, description, form, terms), but the design only has room for the form, so
-`.substack-frame` / `.substack-iframe` in `index.css` crop it with negative margins and darken it
-with `filter: invert(0.92) hue-rotate(180deg)`. The offsets were measured on the live embed; if
-Substack changes its layout, re-measure them (the comment in `index.css` explains how).
+The hero's email form (design's own) opens `https://paulgarabic.substack.com/subscribe?email=…`
+in a new tab; Substack pre-fills the address and the reader confirms there. No iframe.
 
 ---
 
