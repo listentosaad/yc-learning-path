@@ -48,8 +48,14 @@ html {
   scroll-behavior: smooth;
 }
 
+@layer base {
+  a { color: var(--accent); }
+  a:hover { opacity: 0.7; }
+}
+
 body {
   font-family: 'ThmanyahSans', sans-serif;
+  line-height: normal; /* the design uses the browser default, not Tailwind's 1.5 */
   background-color: #0d0d0d;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
@@ -59,11 +65,50 @@ body {
   .animate-card-in {
     opacity: 0;
     transform: translateY(20px);
-    animation: cardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 }
 
 @keyframes floatStar {
   0%   { transform: translateY(0)     scale(1)   rotate(0deg);  opacity: 1; }
   100% { transform: translateY(-56px) scale(0.4) rotate(25deg); opacity: 0; }
+}
+
+@keyframes heroFade {
+  from { opacity: 0; filter: blur(14px); transform: translateY(18px); }
+  to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+}
+
+/* ─── Substack embed ──────────────────────────────────────────────────────────
+   Substack's /embed page shows logo, title, description, then the email form
+   and the terms line, vertically centred in the iframe. The hero only has
+   room for the form + terms, so a 360px-tall iframe is shifted up inside a
+   clipping window. Offsets were measured on the live embed at 360px height:
+     iframe ≥ 337px wide → form starts at 228px, terms end at 317px
+     iframe < 337px wide → form starts at 220px, terms end at 325px
+       (the description wraps one more line)
+   If Substack changes its layout, re-measure and adjust these numbers.
+   invert(0.92) maps Substack's white to #141414 and its black text to
+   #ebebeb, so the widget matches the dark box from the design. */
+.substack-frame {
+  container-type: inline-size;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.substack-iframe {
+  display: block;
+  width: 100%;
+  height: 360px;
+  border: 0;
+  margin-top: -220px;
+  margin-bottom: -35px; /* visible window: 360 - 220 - 35 = 105px */
+  filter: invert(0.92) hue-rotate(180deg);
+}
+@container (width < 337px) {
+  .substack-iframe {
+    margin-top: -212px;
+    margin-bottom: -29px; /* 360 - 212 - 29 = 119px */
+  }
 }
